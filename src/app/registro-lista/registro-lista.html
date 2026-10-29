@@ -1,0 +1,39 @@
+<section class="tarjeta lista">
+  <div class="lista-header">
+    <div>
+      <h2>Reservas registradas</h2>
+      <p>Total: {{ total() }} · Pendientes: {{ pendientes() }}</p>
+    </div>
+  </div>
+
+  @for (registro of registros(); track registro.id) {
+    <article class="registro">
+      <div class="registro-info">
+        <h3>{{ registro.espacio }}</h3>
+        <p>
+          {{ registro.responsable }} · {{ registro.fecha }} ·
+          {{ registro.horaInicio }}–{{ registro.horaFin }}
+        </p>
+        <p>{{ registro.asistentes }} asistentes · {{ registro.items.length }} recurso(s)</p>
+      </div>
+
+      <div class="registro-acciones">
+        <label [for]="'estado-' + registro.id" class="sr-only">Estado</label>
+        <select
+          [id]="'estado-' + registro.id"
+          [value]="registro.estado"
+          (change)="cambiarEstado(registro.id, $any($event.target).value)"
+        >
+          @for (estado of estados; track estado) {
+            <option [value]="estado">{{ estado }}</option>
+          }
+        </select>
+        <button type="button" class="boton peligro" (click)="eliminar(registro.id)">
+          Eliminar
+        </button>
+      </div>
+    </article>
+  } @empty {
+    <p class="vacio">No hay reservas registradas todavía.</p>
+  }
+</section>
