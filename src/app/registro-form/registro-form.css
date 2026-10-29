@@ -1,0 +1,116 @@
+.formulario {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.tarjeta-header h2,
+.items-header h3 {
+  margin: 0;
+}
+
+.tarjeta-header p,
+.items-header p {
+  margin: 0.35rem 0 0;
+  color: var(--texto-suave);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.campo {
+  display: grid;
+  gap: 0.35rem;
+  align-content: start;
+}
+
+label {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+input {
+  width: 100%;
+  border: 1px solid var(--borde);
+  border-radius: 0.6rem;
+  padding: 0.65rem 0.75rem;
+  background: #fff;
+  color: inherit;
+}
+
+input:focus {
+  outline: 2px solid color-mix(in srgb, var(--primario) 45%, transparent);
+  outline-offset: 1px;
+  border-color: var(--primario);
+}
+
+input.ng-invalid.ng-touched,
+input.ng-invalid.ng-dirty {
+  border-color: var(--error);
+}
+
+.error {
+  color: var(--error);
+  font-size: 0.82rem;
+}
+
+.error.grupo {
+  margin: 0;
+  padding: 0.65rem 0.8rem;
+  border-radius: 0.6rem;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+}
+
+.items {
+  display: grid;
+  gap: 0.9rem;
+  padding: 1rem;
+  border: 1px solid var(--borde);
+  border-radius: 0.8rem;
+  background: #f8fafc;
+}
+
+.items-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.item {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) auto;
+  gap: 0.75rem;
+  align-items: start;
+  padding: 0.85rem;
+  border: 1px solid var(--borde);
+  border-radius: 0.7rem;
+  background: #fff;
+}
+
+.acciones {
+  display: flex;
+  justify-content: flex-end;
+}
+
+@media (max-width: 720px) {
+  .grid,
+  .item {
+    grid-template-columns: 1fr;
+  }
+
+  .items-header {
+    flex-direction: column;
+  }
+
+  .acciones {
+    justify-content: stretch;
+  }
+
+  .acciones .boton {
+    width: 100%;
+  }
+}

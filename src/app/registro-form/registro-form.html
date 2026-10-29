@@ -1,0 +1,157 @@
+<form class="tarjeta formulario" [formGroup]="form" (ngSubmit)="guardar()" novalidate>
+  <div class="tarjeta-header">
+    <h2>Nueva reserva</h2>
+    <p>Todos los campos de la cabecera son obligatorios.</p>
+  </div>
+
+  <div class="grid">
+    <div class="campo">
+      <label for="responsable">Responsable</label>
+      <input id="responsable" type="text" formControlName="responsable" autocomplete="name" />
+      @let responsable = form.controls.responsable;
+      @if (responsable.invalid && (responsable.touched || responsable.dirty)) {
+        <small class="error">
+          @if (responsable.hasError('required')) {
+            El responsable es obligatorio.
+          } @else if (responsable.hasError('soloEspacios')) {
+            El responsable no puede tener solo espacios.
+          } @else if (responsable.hasError('minlength')) {
+            Mínimo {{ responsable.getError('minlength')?.requiredLength }} caracteres.
+          }
+        </small>
+      }
+    </div>
+
+    <div class="campo">
+      <label for="espacio">Espacio</label>
+      <input id="espacio" type="text" formControlName="espacio" placeholder="Sala 204" />
+      @let espacio = form.controls.espacio;
+      @if (espacio.invalid && (espacio.touched || espacio.dirty)) {
+        <small class="error">
+          @if (espacio.hasError('required')) {
+            El espacio es obligatorio.
+          } @else if (espacio.hasError('minlength')) {
+            Mínimo {{ espacio.getError('minlength')?.requiredLength }} caracteres.
+          }
+        </small>
+      }
+    </div>
+
+    <div class="campo">
+      <label for="fecha">Fecha</label>
+      <input id="fecha" type="date" formControlName="fecha" />
+      @let fecha = form.controls.fecha;
+      @if (fecha.invalid && (fecha.touched || fecha.dirty)) {
+        <small class="error">La fecha es obligatoria.</small>
+      }
+    </div>
+
+    <div class="campo">
+      <label for="asistentes">Asistentes</label>
+      <input id="asistentes" type="number" min="1" max="100" formControlName="asistentes" />
+      @let asistentes = form.controls.asistentes;
+      @if (asistentes.invalid && (asistentes.touched || asistentes.dirty)) {
+        <small class="error">
+          @if (asistentes.hasError('required')) {
+            Los asistentes son obligatorios.
+          } @else if (asistentes.hasError('min')) {
+            Debe haber al menos 1 asistente.
+          } @else if (asistentes.hasError('max')) {
+            El máximo es 100 asistentes.
+          }
+        </small>
+      }
+    </div>
+
+    <div class="campo">
+      <label for="horaInicio">Hora de inicio</label>
+      <input id="horaInicio" type="time" formControlName="horaInicio" />
+      @let horaInicio = form.controls.horaInicio;
+      @if (horaInicio.invalid && (horaInicio.touched || horaInicio.dirty)) {
+        <small class="error">La hora de inicio es obligatoria.</small>
+      }
+    </div>
+
+    <div class="campo">
+      <label for="horaFin">Hora de fin</label>
+      <input id="horaFin" type="time" formControlName="horaFin" />
+      @let horaFin = form.controls.horaFin;
+      @if (horaFin.invalid && (horaFin.touched || horaFin.dirty)) {
+        <small class="error">La hora de fin es obligatoria.</small>
+      }
+    </div>
+  </div>
+
+  @if (
+    form.hasError('rangoHorario') &&
+    (form.controls.horaInicio.touched ||
+      form.controls.horaInicio.dirty ||
+      form.controls.horaFin.touched ||
+      form.controls.horaFin.dirty)
+  ) {
+    <p class="error grupo">La hora de fin debe ser posterior a la hora de inicio.</p>
+  }
+
+  <section class="items" formArrayName="items">
+    <div class="items-header">
+      <div>
+        <h3>Recursos</h3>
+        <p>Agrega al menos un recurso para la reserva.</p>
+      </div>
+      <button type="button" class="boton secundario" (click)="agregarItem()">
+        Agregar recurso
+      </button>
+    </div>
+
+    @for (item of items.controls; track item; let i = $index) {
+      <div class="item" [formGroupName]="i">
+        <div class="campo">
+          <label [for]="'recurso-' + i">Recurso</label>
+          <input
+            [id]="'recurso-' + i"
+            type="text"
+            formControlName="recurso"
+            placeholder="Proyector"
+          />
+          @let recurso = item.controls.recurso;
+          @if (recurso.invalid && (recurso.touched || recurso.dirty)) {
+            <small class="error">
+              @if (recurso.hasError('required')) {
+                El recurso es obligatorio.
+              } @else if (recurso.hasError('soloEspacios')) {
+                El recurso no puede tener solo espacios.
+              } @else if (recurso.hasError('minlength')) {
+                Mínimo {{ recurso.getError('minlength')?.requiredLength }} caracteres.
+              }
+            </small>
+          }
+        </div>
+
+        <div class="campo">
+          <label [for]="'cantidad-' + i">Cantidad</label>
+          <input [id]="'cantidad-' + i" type="number" min="1" formControlName="cantidad" />
+          @let cantidad = item.controls.cantidad;
+          @if (cantidad.invalid && (cantidad.touched || cantidad.dirty)) {
+            <small class="error">
+              @if (cantidad.hasError('required')) {
+                La cantidad es obligatoria.
+              } @else if (cantidad.hasError('min')) {
+                La cantidad mínima es 1.
+              }
+            </small>
+          }
+        </div>
+
+        <button type="button" class="boton peligro" (click)="quitarItem(i)">Quitar</button>
+      </div>
+    }
+
+    @if (items.hasError('minimoFilas') && (items.touched || items.dirty)) {
+      <small class="error">Debe registrar al menos un recurso.</small>
+    }
+  </section>
+
+  <div class="acciones">
+    <button type="submit" class="boton primario">Registrar reserva</button>
+  </div>
+</form>
