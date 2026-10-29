@@ -1,0 +1,78 @@
+:root {
+  --primario: #0f766e;
+  --primario-oscuro: #115e59;
+  --texto: #1f2937;
+  --texto-suave: #64748b;
+  --borde: #dbe3ec;
+  --fondo: #f4f7fb;
+  --error: #b91c1c;
+  color-scheme: light;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.5;
+  color: var(--texto);
+  background: var(--fondo);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-width: 320px;
+  margin: 0;
+  background:
+    radial-gradient(circle at top right, #d9f0ec 0, transparent 28rem),
+    var(--fondo);
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+h1,
+h2,
+h3,
+p {
+  overflow-wrap: anywhere;
+}
+
+.tarjeta {
+  padding: 1.25rem;
+  border: 1px solid var(--borde);
+  border-radius: 1rem;
+  background: #fff;
+  box-shadow: 0 12px 30px rgb(15 23 42 / 6%);
+}
+
+.boton {
+  padding: 0.6rem 0.9rem;
+  border: 0;
+  border-radius: 0.6rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.boton.primario {
+  background: var(--primario);
+  color: #fff;
+}
+
+.boton.primario:hover {
+  background: var(--primario-oscuro);
+}
+
+.boton.secundario {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+.boton.peligro {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.boton:hover {
+  filter: brightness(0.97);
+}
