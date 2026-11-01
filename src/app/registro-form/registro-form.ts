@@ -71,8 +71,9 @@ export class RegistroForm {
       asistentes: 1,
     });
 
-    this.items.clear();
-    this.items.push(this.nuevoItem());
+    while (this.items.length > 1) {
+      this.items.removeAt(this.items.length - 1);
+    }
   }
 
   private nuevoItem(): ItemForm {
