@@ -103,7 +103,7 @@
       </button>
     </div>
 
-    @for (item of items.controls; track item; let i = $index) {
+    @for (item of items.controls; track $index; let i = $index) {
       <div class="item" [formGroupName]="i">
         <div class="campo">
           <label [for]="'recurso-' + i">Recurso</label>
