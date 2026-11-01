@@ -39,4 +39,8 @@ npm run build
 
 ## Alcance actual
 
-El código cubre la estructura, el modelo tipado, el servicio con signals, el formulario con seis controles de cabecera, validadores integrados, validador propio, validador de grupo y un `FormArray` básico de recursos. Corresponde al avance hasta la sección 4 del informe.
+El código cubre los ocho requerimientos del taller: estructura standalone, modelo tipado, servicio con signals, formulario reactivo con seis controles de cabecera, validadores integrados, validador propio (`sinSoloEspacios`), validador de grupo (`rangoHorario`), `FormArray` de recursos con mínimo de una fila, mensajes de error por tipo, listado con `@for`/`track`/`@empty`, cambio de estado por registro y panel de resumen cargado con `@defer (on interaction)`.
+
+## Casos de prueba
+
+La tabla de casos ejecutados (C1 a C8) y las capturas de evidencia están en el informe `COM30_Taller06_Muñoz.pdf` entregado con el taller.

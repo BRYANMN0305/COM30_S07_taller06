@@ -1,0 +1,29 @@
+<div class="resumen-datos">
+  <div class="dato">
+    <span class="valor">{{ total() }}</span>
+    <span class="etiqueta">Total</span>
+  </div>
+  <div class="dato pendiente">
+    <span class="valor">{{ pendientes() }}</span>
+    <span class="etiqueta">Pendientes</span>
+  </div>
+  <div class="dato aprobada">
+    <span class="valor">{{ aprobadas() }}</span>
+    <span class="etiqueta">Aprobadas</span>
+  </div>
+  <div class="dato rechazada">
+    <span class="valor">{{ rechazadas() }}</span>
+    <span class="etiqueta">Rechazadas</span>
+  </div>
+</div>
+
+@let ultima = ultimaReserva();
+
+@if (ultima) {
+  <p class="ultima">
+    Última reserva: <strong>{{ ultima.espacio }}</strong> · {{ ultima.responsable }} ·
+    {{ ultima.fecha }} ({{ ultima.horaInicio }}–{{ ultima.horaFin }})
+  </p>
+} @else {
+  <p class="ultima">Todavía no hay reservas registradas.</p>
+}

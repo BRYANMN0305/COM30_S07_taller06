@@ -36,4 +36,15 @@
   } @empty {
     <p class="vacio">No hay reservas registradas todavía.</p>
   }
+
+  @defer (on interaction) {
+    <app-resumen />
+  } @placeholder (minimum 0ms) {
+    <button type="button" class="resumen-placeholder">
+      <span>Panel de resumen</span>
+      <small>Toca aquí para cargar el resumen por estado (&#64;defer on interaction).</small>
+    </button>
+  } @loading (minimum 150ms) {
+    <p class="vacio">Cargando resumen…</p>
+  }
 </section>

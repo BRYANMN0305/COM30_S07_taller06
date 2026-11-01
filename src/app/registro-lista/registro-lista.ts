@@ -1,9 +1,11 @@
 import { Component, inject } from '@angular/core';
 import { ESTADOS, EstadoRegistro } from '../models/registro';
 import { RegistroService } from '../services/registro.service';
+import { Resumen } from '../resumen/resumen';
 
 @Component({
   selector: 'app-registro-lista',
+  imports: [Resumen],
   templateUrl: './registro-lista.html',
   styleUrl: './registro-lista.css',
 })
