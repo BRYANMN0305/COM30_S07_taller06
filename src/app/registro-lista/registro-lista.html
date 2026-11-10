@@ -1,47 +1,125 @@
 <section class="tarjeta lista">
-  <div class="lista-header">
-    <div>
-      <h2>Reservas registradas</h2>
-      <p>Total: {{ total() }} · Pendientes: {{ pendientes() }}</p>
+  <div class="panel-busqueda">
+    <div class="lista-header">
+      <div>
+        <h2>Buscar reservas</h2>
+        <p>Por responsable o espacio. Se ignoran mayúsculas y tildes; mínimo 2 caracteres.</p>
+      </div>
+      <p class="llamadas" id="llamadas">
+        Llamadas al servicio: <strong>{{ llamadas() }}</strong>
+      </p>
     </div>
-  </div>
 
-  @for (registro of registros(); track registro.id) {
-    <article class="registro">
-      <div class="registro-info">
-        <h3>{{ registro.espacio }}</h3>
-        <p>
-          {{ registro.responsable }} · {{ registro.fecha }} ·
-          {{ registro.horaInicio }}–{{ registro.horaFin }}
+    <div class="buscador">
+      <label for="busqueda">Buscar</label>
+      <input
+        id="busqueda"
+        type="search"
+        [formControl]="busqueda"
+        placeholder="Ej. sala, María, auditorio"
+        autocomplete="off"
+      />
+      <small>El texto se recorta con trim() y se compara sin tildes ni mayúsculas.</small>
+    </div>
+
+    @if (historial().length > 0) {
+      <div class="historial" aria-label="Últimas consultas">
+        <span class="historial-titulo">Últimas consultas:</span>
+        @for (termino of historial(); track termino) {
+          <span class="chip">{{ termino }}</span>
+        }
+      </div>
+    }
+
+    @if (buscando()) {
+      <p class="estado buscando" role="status">Buscando…</p>
+    } @else if (consultaActiva()) {
+      <div class="resultados-header">
+        <p class="conteos" aria-live="polite">
+          <span id="total-resultados">Total: <strong>{{ total() }}</strong></span>
+          <span class="conteo pendiente" id="conteo-pendiente">
+            Pendiente: <strong>{{ conteos().pendiente }}</strong>
+          </span>
+          <span class="conteo aprobada" id="conteo-aprobada">
+            Aprobada: <strong>{{ conteos().aprobada }}</strong>
+          </span>
+          <span class="conteo rechazada" id="conteo-rechazada">
+            Rechazada: <strong>{{ conteos().rechazada }}</strong>
+          </span>
+          <span class="mostrando">Mostrando: <strong>{{ visibles().length }}</strong></span>
         </p>
-        <p>{{ registro.asistentes }} asistentes · {{ registro.items.length }} recurso(s)</p>
       </div>
 
-      <div class="registro-acciones">
-        <label [for]="'estado-' + registro.id" class="sr-only">Estado</label>
-        <select
-          [id]="'estado-' + registro.id"
-          [value]="registro.estado"
-          (change)="cambiarEstado(registro.id, $any($event.target).value)"
+      <div class="filtros" role="group" aria-label="Filtrar por estado">
+        <button
+          type="button"
+          id="filtro-todos"
+          [class.activo]="filtro() === 'todos'"
+          [attr.aria-pressed]="filtro() === 'todos'"
+          (click)="cambiarFiltro('todos')"
         >
-          @for (estado of estados; track estado) {
-            <option [value]="estado">{{ estado }}</option>
-          }
-        </select>
-        <button type="button" class="boton peligro" (click)="eliminar(registro.id)">
-          Eliminar
+          Todos
         </button>
+        @for (estado of estados; track estado) {
+          <button
+            type="button"
+            [id]="'filtro-' + estado"
+            [class.activo]="filtro() === estado"
+            [attr.aria-pressed]="filtro() === estado"
+            (click)="cambiarFiltro(estado)"
+          >
+            {{ estado }}
+          </button>
+        }
       </div>
-    </article>
-  } @empty {
-    <p class="vacio">No hay reservas registradas todavía.</p>
-  }
+
+      @for (registro of visibles(); track registro.id) {
+        <article class="registro">
+          <div class="registro-info">
+            <h3>
+              <span class="codigo">{{ codigo(registro.id) }}</span>
+              {{ registro.espacio }}
+            </h3>
+            <p>
+              {{ registro.responsable }} · {{ registro.fecha }} ·
+              {{ registro.horaInicio }}–{{ registro.horaFin }}
+            </p>
+            <p>{{ registro.asistentes }} asistentes · {{ registro.items.length }} recurso(s)</p>
+          </div>
+
+          <div class="registro-acciones">
+            <label [for]="'estado-' + registro.id" class="sr-only">Estado</label>
+            <select
+              [id]="'estado-' + registro.id"
+              [value]="registro.estado"
+              (change)="cambiarEstado(registro.id, $any($event.target).value)"
+            >
+              @for (estado of estados; track estado) {
+                <option [value]="estado" [selected]="estado === registro.estado">
+                  {{ estado }}
+                </option>
+              }
+            </select>
+            <button type="button" class="boton peligro" (click)="eliminar(registro.id)">
+              Eliminar
+            </button>
+          </div>
+        </article>
+      } @empty {
+        <p class="vacio">Sin coincidencias</p>
+      }
+    } @else {
+      <p class="estado minimo" role="status">
+        Escribe al menos 2 caracteres para buscar por responsable o espacio.
+      </p>
+    }
+  </div>
 
   @defer (on interaction) {
     <app-resumen />
   } @placeholder (minimum 0ms) {
     <button type="button" class="resumen-placeholder">
-      <span>Panel de resumen</span>
+      <span>Resumen general del servicio</span>
       <small>Toca aquí para cargar el resumen por estado (&#64;defer on interaction).</small>
     </button>
   } @loading (minimum 150ms) {
