@@ -1,8 +1,20 @@
-<section class="tarjeta lista">
-  <div class="panel-busqueda">
+<section class="pagina">
+  <div class="pagina-header">
+    <div>
+      <p class="pagina-eyebrow">Listado · /reservas</p>
+      <h2>Reservas registradas</h2>
+      <p>
+        {{ total() }} reserva(s) en el servicio. El filtro por estado vive en la URL y sobrevive a
+        una recarga.
+      </p>
+    </div>
+    <a class="boton primario" routerLink="/reservas/nueva">Nueva reserva</a>
+  </div>
+
+  <div class="tarjeta panel-busqueda">
     <div class="lista-header">
       <div>
-        <h2>Buscar reservas</h2>
+        <h3>Buscar en el listado</h3>
         <p>Por responsable o espacio. Se ignoran mayúsculas y tildes; mínimo 2 caracteres.</p>
       </div>
       <p class="llamadas" id="llamadas">
@@ -33,96 +45,107 @@
 
     @if (buscando()) {
       <p class="estado buscando" role="status">Buscando…</p>
-    } @else if (consultaActiva()) {
-      <div class="resultados-header">
-        <p class="conteos" aria-live="polite">
-          <span id="total-resultados">Total: <strong>{{ total() }}</strong></span>
-          <span class="conteo pendiente" id="conteo-pendiente">
-            Pendiente: <strong>{{ conteos().pendiente }}</strong>
-          </span>
-          <span class="conteo aprobada" id="conteo-aprobada">
-            Aprobada: <strong>{{ conteos().aprobada }}</strong>
-          </span>
-          <span class="conteo rechazada" id="conteo-rechazada">
-            Rechazada: <strong>{{ conteos().rechazada }}</strong>
-          </span>
-          <span class="mostrando">Mostrando: <strong>{{ visibles().length }}</strong></span>
-        </p>
-      </div>
+    }
 
-      <div class="filtros" role="group" aria-label="Filtrar por estado">
-        <button
-          type="button"
-          id="filtro-todos"
-          [class.activo]="filtro() === 'todos'"
-          [attr.aria-pressed]="filtro() === 'todos'"
-          (click)="cambiarFiltro('todos')"
-        >
-          Todos
-        </button>
-        @for (estado of estados; track estado) {
-          <button
-            type="button"
-            [id]="'filtro-' + estado"
-            [class.activo]="filtro() === estado"
-            [attr.aria-pressed]="filtro() === estado"
-            (click)="cambiarFiltro(estado)"
-          >
-            {{ estado }}
-          </button>
-        }
-      </div>
-
-      @for (registro of visibles(); track registro.id) {
-        <article class="registro">
-          <div class="registro-info">
-            <h3>
-              <span class="codigo">{{ codigo(registro.id) }}</span>
-              {{ registro.espacio }}
-            </h3>
-            <p>
-              {{ registro.responsable }} · {{ registro.fecha }} ·
-              {{ registro.horaInicio }}–{{ registro.horaFin }}
-            </p>
-            <p>{{ registro.asistentes }} asistentes · {{ registro.items.length }} recurso(s)</p>
-          </div>
-
-          <div class="registro-acciones">
-            <label [for]="'estado-' + registro.id" class="sr-only">Estado</label>
-            <select
-              [id]="'estado-' + registro.id"
-              [value]="registro.estado"
-              (change)="cambiarEstado(registro.id, $any($event.target).value)"
-            >
-              @for (estado of estados; track estado) {
-                <option [value]="estado" [selected]="estado === registro.estado">
-                  {{ estado }}
-                </option>
-              }
-            </select>
-            <button type="button" class="boton peligro" (click)="eliminar(registro.id)">
-              Eliminar
-            </button>
-          </div>
-        </article>
-      } @empty {
-        <p class="vacio">Sin coincidencias</p>
-      }
-    } @else {
+    @if (texto().trim().length === 1) {
       <p class="estado minimo" role="status">
-        Escribe al menos 2 caracteres para buscar por responsable o espacio.
+        Escribe al menos 2 caracteres para filtrar el listado. Mientras tanto se muestran todas las
+        reservas.
       </p>
     }
   </div>
 
-  @defer (on interaction) {
-    <app-resumen />
-  } @placeholder (minimum 0ms) {
-    <button type="button" class="resumen-placeholder">
-      <span>Resumen general del servicio</span>
-      <small>Toca aquí para cargar el resumen por estado (&#64;defer on interaction).</small>
-    </button>
-  } @loading (minimum 150ms) {
-    <p class="vacio">Cargando resumen…</p>
-  }
+  <div class="tarjeta resultados">
+    <div class="resultados-header">
+      <p class="conteos" aria-live="polite">
+        <span id="total-resultados">Total: <strong>{{ total() }}</strong></span>
+        <span class="conteo pendiente" id="conteo-pendiente">
+          Pendiente: <strong>{{ conteos().pendiente }}</strong>
+        </span>
+        <span class="conteo aprobada" id="conteo-aprobada">
+          Aprobada: <strong>{{ conteos().aprobada }}</strong>
+        </span>
+        <span class="conteo rechazada" id="conteo-rechazada">
+          Rechazada: <strong>{{ conteos().rechazada }}</strong>
+        </span>
+        <span class="mostrando">Mostrando: <strong>{{ mostrando() }}</strong></span>
+      </p>
+    </div>
+
+    <nav class="filtros" aria-label="Filtrar por estado">
+      <a
+        id="filtro-todos"
+        routerLink="."
+        [queryParams]="{ estado: null }"
+        [class.activo]="filtroActual() === 'todos'"
+        [attr.aria-current]="filtroActual() === 'todos' ? 'page' : null"
+      >
+        Todos
+      </a>
+      @for (estado of estados; track estado) {
+        <a
+          [id]="'filtro-' + estado"
+          routerLink="."
+          [queryParams]="{ estado: estado }"
+          [class.activo]="filtroActual() === estado"
+          [attr.aria-current]="filtroActual() === estado ? 'page' : null"
+        >
+          {{ estado }}
+        </a>
+      }
+    </nav>
+
+    @if (filtroActual() !== 'todos' && !filtroValido()) {
+      <p class="aviso-filtro">
+        El estado «{{ filtroActual() }}» no existe en el catálogo; se muestran 0 reservas.
+      </p>
+    }
+
+    @for (registro of visibles(); track registro.id) {
+      <article class="registro">
+        <a class="registro-info" [routerLink]="['/reservas', codigo(registro.id)]">
+          <h3>
+            <span class="codigo">{{ codigo(registro.id) }}</span>
+            {{ registro.espacio }}
+          </h3>
+          <p>
+            {{ registro.responsable }} · {{ registro.fecha }} ·
+            {{ registro.horaInicio }}–{{ registro.horaFin }}
+          </p>
+          <p>{{ registro.asistentes }} asistentes · {{ registro.items.length }} recurso(s)</p>
+        </a>
+
+        <div class="registro-acciones">
+          <a class="boton secundario" [routerLink]="['/reservas', codigo(registro.id)]">
+            Ver detalle
+          </a>
+          <label [for]="'estado-' + registro.id" class="sr-only">Estado</label>
+          <select
+            [id]="'estado-' + registro.id"
+            [value]="registro.estado"
+            (change)="cambiarEstado(registro.id, $any($event.target).value)"
+          >
+            @for (estado of estados; track estado) {
+              <option [value]="estado" [selected]="estado === registro.estado">
+                {{ estado }}
+              </option>
+            }
+          </select>
+          <button type="button" class="boton peligro" (click)="eliminar(registro.id)">
+            Eliminar
+          </button>
+        </div>
+      </article>
+    } @empty {
+      <p class="vacio" id="sin-coincidencias">
+        @if (filtroActual() !== 'todos' && consultaActiva()) {
+          Sin coincidencias para «{{ texto().trim() }}» con estado «{{ filtroActual() }}».
+        } @else if (filtroActual() !== 'todos') {
+          Sin coincidencias: no hay reservas con estado «{{ filtroActual() }}».
+        } @else {
+          Sin coincidencias para «{{ texto().trim() }}».
+        }
+      </p>
+    }
+  </div>
 </section>

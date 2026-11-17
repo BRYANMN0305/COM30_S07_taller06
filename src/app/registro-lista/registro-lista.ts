@@ -1,6 +1,7 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, input, signal } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import {
   debounceTime,
   distinctUntilChanged,
@@ -12,22 +13,20 @@ import {
   switchMap,
 } from 'rxjs';
 import { ESTADOS, EstadoRegistro, Registro } from '../models/registro';
-import { Resumen } from '../resumen/resumen';
 import { RegistroService } from '../services/registro.service';
-
-type FiltroEstado = 'todos' | EstadoRegistro;
 
 @Component({
   selector: 'app-registro-lista',
-  imports: [ReactiveFormsModule, Resumen],
+  imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './registro-lista.html',
   styleUrl: './registro-lista.css',
 })
 export class RegistroLista {
   private readonly registroService = inject(RegistroService);
 
+  readonly estado = input<string | undefined>(undefined);
+
   protected readonly busqueda = new FormControl('', { nonNullable: true });
-  protected readonly filtro = signal<FiltroEstado>('todos');
   protected readonly buscando = signal(false);
   protected readonly historial = signal<string[]>([]);
   protected readonly estados = ESTADOS;
@@ -64,24 +63,47 @@ export class RegistroLista {
       .filter((registro): registro is Registro => registro !== undefined);
   });
 
-  protected readonly visibles = computed(() => {
-    const filtro = this.filtro();
-    const resultados = this.resultadosVivos();
+  protected readonly base = computed(() =>
+    this.consultaActiva() ? this.resultadosVivos() : this.registroService.registros(),
+  );
 
-    return filtro === 'todos'
-      ? resultados
-      : resultados.filter((registro) => registro.estado === filtro);
+  private readonly estadoUrl = computed(() => {
+    const valor = (this.estado() ?? '').trim().toLowerCase();
+
+    return valor === 'todos' ? '' : valor;
   });
 
-  protected readonly total = computed(() => this.resultadosVivos().length);
+  protected readonly filtroActual = computed(() => this.estadoUrl() || 'todos');
+
+  protected readonly filtroValido = computed<EstadoRegistro | null>(() => {
+    const valor = this.estadoUrl();
+
+    return (ESTADOS as readonly string[]).includes(valor) ? (valor as EstadoRegistro) : null;
+  });
+
+  protected readonly visibles = computed(() => {
+    const valor = this.estadoUrl();
+    const base = this.base();
+
+    if (!valor) {
+      return base;
+    }
+
+    const filtro = this.filtroValido();
+
+    return filtro === null ? [] : base.filter((registro) => registro.estado === filtro);
+  });
+
+  protected readonly total = computed(() => this.base().length);
+  protected readonly mostrando = computed(() => this.visibles().length);
 
   protected readonly conteos = computed(() => {
-    const resultados = this.resultadosVivos();
+    const base = this.base();
 
     return {
-      pendiente: resultados.filter((registro) => registro.estado === 'pendiente').length,
-      aprobada: resultados.filter((registro) => registro.estado === 'aprobada').length,
-      rechazada: resultados.filter((registro) => registro.estado === 'rechazada').length,
+      pendiente: base.filter((registro) => registro.estado === 'pendiente').length,
+      aprobada: base.filter((registro) => registro.estado === 'aprobada').length,
+      rechazada: base.filter((registro) => registro.estado === 'rechazada').length,
     };
   });
 
@@ -97,10 +119,6 @@ export class RegistroLista {
           [texto, ...historial.filter((termino) => termino !== texto)].slice(0, 5),
         );
       });
-  }
-
-  protected cambiarFiltro(filtro: FiltroEstado): void {
-    this.filtro.set(filtro);
   }
 
   protected cambiarEstado(id: number, estado: string): void {
@@ -121,7 +139,6 @@ export class RegistroLista {
       return of([]);
     }
 
-    this.filtro.set('todos');
     this.buscando.set(true);
 
     return this.registroService
