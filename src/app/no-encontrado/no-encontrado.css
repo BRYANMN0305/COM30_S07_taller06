@@ -1,0 +1,32 @@
+.no-encontrado {
+  display: grid;
+  gap: 0.8rem;
+  justify-items: start;
+  max-width: 48rem;
+}
+
+.codigo-404 {
+  margin: 0;
+  color: var(--primario);
+  font-size: clamp(4rem, 12vw, 7rem);
+  font-weight: 800;
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+}
+
+.no-encontrado h2 {
+  margin: 0;
+}
+
+.no-encontrado p {
+  margin: 0;
+  color: var(--texto-suave);
+}
+
+code {
+  padding: 0.1rem 0.35rem;
+  border-radius: 0.3rem;
+  background: #e2e8f0;
+  color: var(--texto);
+  font-size: 0.88em;
+}

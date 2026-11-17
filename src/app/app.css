@@ -1,18 +1,25 @@
-.contenedor {
-  width: min(980px, calc(100% - 2rem));
-  margin: 0 auto;
-  padding: 2.5rem 0 3rem;
-  display: grid;
-  gap: 1.5rem;
+.cabecera {
+  padding: 2rem 0 0;
+  background: linear-gradient(120deg, #0f172a 0%, #115e59 100%);
+  color: #fff;
 }
 
-.cabecera {
-  padding: 1rem 0 0.25rem;
+.barra {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  padding-bottom: 1.1rem;
+}
+
+.marca {
+  max-width: 62ch;
 }
 
 .eyebrow {
   margin: 0;
-  color: var(--primario);
+  color: #5eead4;
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.12em;
@@ -20,14 +27,63 @@
 }
 
 .cabecera h1 {
-  margin: 0.35rem 0 0.5rem;
-  font-size: clamp(2rem, 4vw, 3rem);
-  line-height: 1.1;
+  margin: 0.35rem 0 0.45rem;
+  font-size: clamp(2rem, 4vw, 2.9rem);
+  line-height: 1.05;
+  color: #fff;
 }
 
 .descripcion {
-  max-width: 60ch;
+  margin: 0;
+  color: #cbd5e1;
+  font-size: 0.98rem;
+}
+
+.menu {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.menu a {
+  padding: 0.55rem 0.8rem;
+  border-radius: 0.55rem;
+  color: #e2e8f0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.menu a:hover {
+  background: rgb(255 255 255 / 12%);
+}
+
+.menu a.activo {
+  background: #fff;
+  color: #0f172a;
+}
+
+main.contenedor {
+  padding: 2rem 0 3rem;
+}
+
+.pie {
+  border-top: 1px solid var(--borde);
+  background: #fff;
+}
+
+.pie .contenedor {
+  padding: 1.1rem 0;
+}
+
+.pie p {
   margin: 0;
   color: var(--texto-suave);
-  font-size: 1.05rem;
+  font-size: 0.82rem;
+}
+
+@media (max-width: 720px) {
+  .barra {
+    align-items: flex-start;
+  }
 }

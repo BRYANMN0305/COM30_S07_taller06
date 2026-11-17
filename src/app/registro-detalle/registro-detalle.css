@@ -1,0 +1,77 @@
+.tarjeta h3 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.datos {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.7rem;
+  margin: 1rem 0 0;
+}
+
+.datos div {
+  padding: 0.65rem 0.75rem;
+  border: 1px solid var(--borde);
+  border-radius: 0.6rem;
+  background: #f8fafc;
+}
+
+.datos dt {
+  margin: 0;
+  color: var(--texto-suave);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.datos dd {
+  margin: 0.15rem 0 0;
+  font-weight: 600;
+}
+
+.recursos {
+  display: grid;
+  gap: 0.5rem;
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.recursos li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.7rem 0.8rem;
+  border: 1px solid var(--borde);
+  border-radius: 0.6rem;
+  background: #f8fafc;
+}
+
+.recursos strong {
+  color: var(--primario-oscuro);
+}
+
+.no-existe {
+  display: grid;
+  gap: 0.8rem;
+  justify-items: start;
+  max-width: 48rem;
+}
+
+.no-existe h2 {
+  margin: 0;
+}
+
+.no-existe p {
+  margin: 0;
+  color: var(--texto-suave);
+}
+
+@media (max-width: 560px) {
+  .datos {
+    grid-template-columns: 1fr;
+  }
+}

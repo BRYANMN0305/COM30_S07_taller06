@@ -1,13 +1,30 @@
-<main class="contenedor">
-  <header class="cabecera">
-    <p class="eyebrow">COM30 · Taller 07 · Escenario E3</p>
-    <h1>Reserva de espacios</h1>
-    <p class="descripcion">
-      Busca reservas por responsable o espacio con una tubería reactiva: debounce, switchMap y
-      signals.
-    </p>
-  </header>
+<header class="cabecera">
+  <div class="contenedor barra">
+    <div class="marca">
+      <p class="eyebrow">COM30 · Taller 08 · Rutas y navegación</p>
+      <h1>Reserva de espacios</h1>
+      <p class="descripcion">
+        Listado, detalle, alta, estadísticas y 404 sobre el mismo servicio del Taller 07.
+      </p>
+    </div>
 
-  <app-registro-lista />
-  <app-registro-form />
+    <nav class="menu" aria-label="Navegación principal">
+      <a routerLink="/" routerLinkActive="activo" [routerLinkActiveOptions]="{ exact: true }">
+        Inicio
+      </a>
+      <a routerLink="/reservas" routerLinkActive="activo">Reservas</a>
+      <a routerLink="/reservas/nueva" routerLinkActive="activo">Nueva reserva</a>
+      <a routerLink="/estadisticas" routerLinkActive="activo">Estadísticas</a>
+    </nav>
+  </div>
+</header>
+
+<main class="contenedor">
+  <router-outlet />
 </main>
+
+<footer class="pie">
+  <div class="contenedor">
+    <p>COM30 · Programación con Frameworks para Web · Taller 08 · 2026-III</p>
+  </div>
+</footer>

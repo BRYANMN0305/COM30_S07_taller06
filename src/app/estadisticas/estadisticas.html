@@ -1,0 +1,68 @@
+<section class="pagina">
+  <div class="pagina-header">
+    <div>
+      <p class="pagina-eyebrow">Vista diferida · /estadisticas</p>
+      <h2>Estadísticas del servicio</h2>
+      <p>
+        Cálculos con las signals del Taller 07. Esta ruta se carga con <code>loadComponent</code>.
+      </p>
+    </div>
+    <a class="boton secundario" routerLink="/reservas">Volver al listado</a>
+  </div>
+
+  <div class="tarjeta">
+    <app-resumen />
+  </div>
+
+  <div class="grid-dos">
+    <section class="tarjeta">
+      <h3>Distribución por estado</h3>
+      @for (fila of porEstado(); track fila.estado) {
+        <div class="fila">
+          <div class="fila-cabecera">
+            <span class="etiqueta">
+              <span [class]="'punto ' + fila.estado"></span>
+              {{ fila.estado | titlecase }}
+            </span>
+            <strong>{{ fila.cantidad }} · {{ fila.porcentaje }}%</strong>
+          </div>
+          <div class="barra">
+            <span [class]="'relleno ' + fila.estado" [style.width.%]="fila.porcentaje"></span>
+          </div>
+        </div>
+      }
+    </section>
+
+    <section class="tarjeta">
+      <h3>Reservas por espacio</h3>
+      @for (fila of porEspacio(); track fila.espacio) {
+        <div class="fila">
+          <div class="fila-cabecera">
+            <span>{{ fila.espacio }}</span>
+            <strong>{{ fila.cantidad }}</strong>
+          </div>
+          <div class="barra">
+            <span class="relleno espacio" [style.width.%]="fila.porcentaje"></span>
+          </div>
+        </div>
+      }
+    </section>
+  </div>
+
+  <section class="tarjeta">
+    <h3>Próximas reservas</h3>
+    <ul class="proximas">
+      @for (registro of proximas(); track registro.id) {
+        <li>
+          <a [routerLink]="['/reservas', codigo(registro.id)]">
+            <strong>{{ codigo(registro.id) }}</strong> · {{ registro.espacio }}
+          </a>
+          <span>
+            {{ registro.fecha }} · {{ registro.horaInicio }}–{{ registro.horaFin }} ·
+            {{ registro.responsable }}
+          </span>
+        </li>
+      }
+    </ul>
+  </section>
+</section>

@@ -1,0 +1,72 @@
+<section class="pagina">
+  <a class="volver" routerLink="/reservas">← Volver al listado</a>
+
+  @if (registro(); as r) {
+    <div class="pagina-header">
+      <div>
+        <p class="pagina-eyebrow">Detalle · {{ codigo() }}</p>
+        <h2>{{ r.espacio }}</h2>
+        <p>{{ r.responsable }} · {{ r.fecha }}</p>
+      </div>
+      <span [class]="'badge ' + r.estado">{{ r.estado | titlecase }}</span>
+    </div>
+
+    <div class="grid-dos">
+      <section class="tarjeta">
+        <h3>Datos de la reserva</h3>
+        <dl class="datos">
+          <div>
+            <dt>Código</dt>
+            <dd>{{ codigo() }}</dd>
+          </div>
+          <div>
+            <dt>Responsable</dt>
+            <dd>{{ r.responsable }}</dd>
+          </div>
+          <div>
+            <dt>Espacio</dt>
+            <dd>{{ r.espacio }}</dd>
+          </div>
+          <div>
+            <dt>Fecha</dt>
+            <dd>{{ r.fecha }}</dd>
+          </div>
+          <div>
+            <dt>Horario</dt>
+            <dd>{{ r.horaInicio }} – {{ r.horaFin }}</dd>
+          </div>
+          <div>
+            <dt>Asistentes</dt>
+            <dd>{{ r.asistentes }}</dd>
+          </div>
+          <div>
+            <dt>Estado</dt>
+            <dd><span [class]="'badge ' + r.estado">{{ r.estado | titlecase }}</span></dd>
+          </div>
+        </dl>
+      </section>
+
+      <section class="tarjeta">
+        <h3>Recursos solicitados</h3>
+        <ul class="recursos">
+          @for (item of r.items; track $index) {
+            <li>
+              <span>{{ item.recurso }}</span>
+              <strong>× {{ item.cantidad }}</strong>
+            </li>
+          }
+        </ul>
+      </section>
+    </div>
+  } @else {
+    <div class="tarjeta no-existe" id="detalle-inexistente">
+      <p class="pagina-eyebrow">Detalle · {{ codigo() }}</p>
+      <h2>No existe la reserva {{ codigo() }}</h2>
+      <p>
+        El código «{{ id() }}» no corresponde a ninguna reserva registrada. Es un detalle sin
+        registro, no una ruta inexistente.
+      </p>
+      <a class="boton primario" routerLink="/reservas">Volver al listado</a>
+    </div>
+  }
+</section>

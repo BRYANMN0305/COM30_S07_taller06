@@ -1,10 +1,9 @@
 import { Component } from '@angular/core';
-import { RegistroForm } from './registro-form/registro-form';
-import { RegistroLista } from './registro-lista/registro-lista';
+import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
-  imports: [RegistroForm, RegistroLista],
+  imports: [RouterLink, RouterLinkActive, RouterOutlet],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })

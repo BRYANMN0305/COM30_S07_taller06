@@ -1,0 +1,114 @@
+.tarjeta h3 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.fila {
+  display: grid;
+  gap: 0.35rem;
+  margin-top: 0.9rem;
+}
+
+.fila-cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 0.86rem;
+}
+
+.etiqueta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.punto {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  background: var(--primario);
+}
+
+.punto.pendiente {
+  background: #d97706;
+}
+
+.punto.aprobada {
+  background: #16a34a;
+}
+
+.punto.rechazada {
+  background: #dc2626;
+}
+
+.barra {
+  height: 0.45rem;
+  border-radius: 999px;
+  background: #e2e8f0;
+  overflow: hidden;
+}
+
+.relleno {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--primario);
+}
+
+.relleno.pendiente {
+  background: #f59e0b;
+}
+
+.relleno.aprobada {
+  background: #22c55e;
+}
+
+.relleno.rechazada {
+  background: #ef4444;
+}
+
+.relleno.espacio {
+  background: linear-gradient(90deg, var(--primario), #2dd4bf);
+}
+
+.proximas {
+  display: grid;
+  gap: 0.5rem;
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.proximas li {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid var(--borde);
+  border-radius: 0.6rem;
+  background: #f8fafc;
+  flex-wrap: wrap;
+}
+
+.proximas a {
+  color: var(--primario-oscuro);
+  text-decoration: none;
+}
+
+.proximas a:hover {
+  text-decoration: underline;
+}
+
+.proximas span {
+  color: var(--texto-suave);
+  font-size: 0.84rem;
+}
+
+code {
+  padding: 0.1rem 0.3rem;
+  border-radius: 0.3rem;
+  background: #e2e8f0;
+  font-size: 0.85em;
+}
