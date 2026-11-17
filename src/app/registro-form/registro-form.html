@@ -1,7 +1,10 @@
 <form class="tarjeta formulario" [formGroup]="form" (ngSubmit)="guardar()" novalidate>
   <div class="tarjeta-header">
     <h2>Nueva reserva</h2>
-    <p>Todos los campos de la cabecera son obligatorios.</p>
+    <p>
+      Todos los campos de la cabecera son obligatorios. Al guardar irás al detalle de la reserva
+      creada.
+    </p>
   </div>
 
   <div class="grid">
@@ -152,6 +155,7 @@
   </section>
 
   <div class="acciones">
+    <a class="boton secundario" routerLink="/reservas">Cancelar</a>
     <button type="submit" class="boton primario">Registrar reserva</button>
   </div>
 </form>

@@ -94,6 +94,8 @@ input.ng-invalid.ng-dirty {
 .acciones {
   display: flex;
   justify-content: flex-end;
+  gap: 0.6rem;
+  flex-wrap: wrap;
 }
 
 @media (max-width: 720px) {

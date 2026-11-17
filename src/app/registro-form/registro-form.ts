@@ -7,6 +7,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
 import { RegistroService } from '../services/registro.service';
 import { minimoFilas, rangoHorario, sinSoloEspacios } from '../validators/validadores';
 
@@ -17,13 +18,14 @@ type ItemForm = FormGroup<{
 
 @Component({
   selector: 'app-registro-form',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './registro-form.html',
   styleUrl: './registro-form.css',
 })
 export class RegistroForm {
   private readonly fb = inject(FormBuilder).nonNullable;
   private readonly registroService = inject(RegistroService);
+  private readonly router = inject(Router);
 
   protected readonly form = this.fb.group(
     {
@@ -57,7 +59,7 @@ export class RegistroForm {
       return;
     }
 
-    this.registroService.agregar({
+    const nuevo = this.registroService.agregar({
       ...this.form.getRawValue(),
       estado: 'pendiente',
     });
@@ -74,6 +76,12 @@ export class RegistroForm {
     while (this.items.length > 1) {
       this.items.removeAt(this.items.length - 1);
     }
+
+    void this.router.navigate(['/reservas', this.codigo(nuevo.id)]);
+  }
+
+  private codigo(id: number): string {
+    return `R${id.toString().padStart(2, '0')}`;
   }
 
   private nuevoItem(): ItemForm {

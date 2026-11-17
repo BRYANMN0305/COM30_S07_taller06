@@ -29,10 +29,16 @@ export class RegistroService {
     return of(encontrados).pipe(delay(retardo));
   }
 
-  agregar(registro: Omit<Registro, 'id'>): void {
-    const nuevo: Registro = { ...registro, id: this.proximoId() };
+  agregar(registro: Omit<Registro, 'id'>): Registro {
+    const nuevo: Registro = {
+      ...registro,
+      id: this.proximoId(),
+      items: registro.items.map((item) => ({ ...item })),
+    };
 
     this.registrosSignal.update((registros) => [...registros, nuevo]);
+
+    return nuevo;
   }
 
   cambiarEstado(id: number, estado: EstadoRegistro): void {
