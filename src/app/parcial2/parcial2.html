@@ -1,0 +1,96 @@
+<section class="pagina">
+  <div class="pagina-header">
+    <div>
+      <p class="pagina-eyebrow">Parcial 2 · /parcial2</p>
+      <h2>Solicitud validada</h2>
+      <p>
+        Formulario reactivo con validadores propios. Fila d = 0: m = {{ m }}, tope = {{ tope }}.
+      </p>
+    </div>
+    <span class="badge parametros">m = {{ m }} · tope = {{ tope }}</span>
+  </div>
+
+  <form class="tarjeta formulario" [formGroup]="form" (ngSubmit)="guardar()" novalidate>
+    <div class="tarjeta-header">
+      <h2>Datos de la solicitud</h2>
+      <p>
+        Todos los campos son obligatorios. La cantidad debe estar entre 1 y {{ tope }} y ser múltiplo
+        de {{ m }}.
+      </p>
+    </div>
+
+    <div class="grid">
+      <div class="campo">
+        <label for="codigo">Código</label>
+        <input id="codigo" type="text" formControlName="codigo" placeholder="AB123" autocomplete="off" />
+        @let codigo = form.controls.codigo;
+        @if (codigo.invalid && (codigo.touched || codigo.dirty)) {
+          @if (codigo.hasError('required')) {
+            <small class="error">El código es obligatorio.</small>
+          }
+          @if (codigo.hasError('pattern')) {
+            <small class="error">El código debe tener dos letras mayúsculas y tres dígitos (AB123).</small>
+          }
+        }
+      </div>
+
+      <div class="campo">
+        <label for="cantidad">Cantidad</label>
+        <input
+          id="cantidad"
+          type="number"
+          min="1"
+          [max]="tope"
+          formControlName="cantidad"
+        />
+        @let cantidad = form.controls.cantidad;
+        @if (cantidad.invalid && (cantidad.touched || cantidad.dirty)) {
+          @if (cantidad.hasError('required')) {
+            <small class="error">La cantidad es obligatoria.</small>
+          }
+          @if (cantidad.hasError('min')) {
+            <small class="error">La cantidad mínima es 1.</small>
+          }
+          @if (cantidad.hasError('max')) {
+            <small class="error">La cantidad máxima es {{ tope }}.</small>
+          }
+          @if (cantidad.hasError('multiplo')) {
+            <small class="error">La cantidad debe ser múltiplo de {{ m }}.</small>
+          }
+        }
+      </div>
+
+      <div class="campo">
+        <label for="desde">Desde</label>
+        <input id="desde" type="number" formControlName="desde" />
+        @let desde = form.controls.desde;
+        @if (desde.invalid && (desde.touched || desde.dirty)) {
+          <small class="error">El valor «desde» es obligatorio.</small>
+        }
+      </div>
+
+      <div class="campo">
+        <label for="hasta">Hasta</label>
+        <input id="hasta" type="number" formControlName="hasta" />
+        @let hasta = form.controls.hasta;
+        @if (hasta.invalid && (hasta.touched || hasta.dirty)) {
+          <small class="error">El valor «hasta» es obligatorio.</small>
+        }
+      </div>
+    </div>
+
+    @if (
+      form.hasError('hastaMayor') &&
+      (form.controls.desde.touched ||
+        form.controls.desde.dirty ||
+        form.controls.hasta.touched ||
+        form.controls.hasta.dirty)
+    ) {
+      <p class="error grupo">«Hasta» debe ser mayor que «desde».</p>
+    }
+
+    <div class="acciones">
+      <button type="submit" class="boton primario">Validar solicitud</button>
+    </div>
+  </form>
+</section>
