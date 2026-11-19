@@ -1,6 +1,7 @@
 import { Component, computed, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { debounceTime, distinctUntilChanged, map, scan } from 'rxjs';
 import { RegistroService } from '../services/registro.service';
 import { DESDE, HASTA, M, PATRON_CODIGO, TOPE } from './parametros';
@@ -29,6 +30,7 @@ const BUSQUEDA_INICIAL: EstadoBusqueda = { valor: '', total: 0 };
 export class Parcial2 {
   private readonly fb = inject(FormBuilder).nonNullable;
   private readonly registroService = inject(RegistroService);
+  private readonly router = inject(Router);
 
   protected readonly m = M;
   protected readonly tope = TOPE;
@@ -81,6 +83,12 @@ export class Parcial2 {
       this.form.markAllAsTouched();
       return;
     }
+
+    const { codigo, cantidad } = this.form.getRawValue();
+
+    void this.router.navigate(['/parcial2/detalle', codigo], {
+      queryParams: { cantidad },
+    });
   }
 }
 

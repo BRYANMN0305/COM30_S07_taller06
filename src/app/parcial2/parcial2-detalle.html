@@ -1,0 +1,48 @@
+<section class="pagina">
+  <a class="volver" routerLink="/parcial2">← Volver al formulario</a>
+
+  <p class="direccion" id="direccion-detalle">
+    Dirección: <code>{{ direccion() }}</code>
+  </p>
+
+  @if (!formatoValido()) {
+    <div class="tarjeta aviso-invalido" id="codigo-invalido">
+      <p class="pagina-eyebrow">Detalle · {{ codigo() }}</p>
+      <h2>Código inválido</h2>
+      <p>
+        El código «{{ codigo() }}» no cumple el formato de dos letras mayúsculas y tres dígitos.
+      </p>
+      <p>Este aviso pertenece al detalle; no es la vista 404.</p>
+      <a class="boton primario" routerLink="/parcial2">Volver al formulario</a>
+    </div>
+  } @else {
+    <div class="pagina-header">
+      <div>
+        <p class="pagina-eyebrow">Detalle · /parcial2/detalle/{{ codigo() }}</p>
+        <h2>Solicitud {{ codigo() }}</h2>
+        <p>Valores calculados con m = {{ m }} y tope = {{ tope }}.</p>
+      </div>
+    </div>
+
+    <section class="tarjeta">
+      <dl class="datos">
+        <div>
+          <dt>Código</dt>
+          <dd id="detalle-codigo">{{ codigo() }}</dd>
+        </div>
+        <div>
+          <dt>Cantidad</dt>
+          <dd id="detalle-cantidad">{{ cantidadNumero() }}</dd>
+        </div>
+        <div>
+          <dt>Bloques (cantidad / {{ m }})</dt>
+          <dd id="detalle-bloques">{{ bloques() }}</dd>
+        </div>
+        <div>
+          <dt>Margen (tope − cantidad)</dt>
+          <dd id="detalle-margen">{{ margen() }}</dd>
+        </div>
+      </dl>
+    </section>
+  }
+</section>
