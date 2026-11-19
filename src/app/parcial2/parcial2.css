@@ -74,6 +74,69 @@ input.ng-invalid.ng-dirty {
   flex-wrap: wrap;
 }
 
+.panel-busqueda {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.resumen-busqueda {
+  margin: 0;
+  padding: 0.7rem 0.85rem;
+  border-radius: 0.7rem;
+  background: #f0fdfa;
+  border: 1px solid #99f6e4;
+}
+
+.resumen-busqueda strong {
+  color: var(--primario-oscuro);
+}
+
+.conteo-listado {
+  margin: 0;
+  color: var(--texto-suave);
+  font-size: 0.88rem;
+}
+
+.lista-reservas {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.reserva {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1.2fr) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--borde);
+  border-radius: 0.65rem;
+  background: #f8fafc;
+}
+
+.codigo-reserva {
+  font-weight: 700;
+  color: var(--primario-oscuro);
+}
+
+.responsable {
+  font-weight: 600;
+}
+
+.vacio {
+  margin: 0;
+  padding: 0.8rem;
+  border-radius: 0.6rem;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: var(--error);
+}
+
+@media (max-width: 720px) {
+  .reserva {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+}
+
 @media (max-width: 720px) {
   .grid {
     grid-template-columns: 1fr;

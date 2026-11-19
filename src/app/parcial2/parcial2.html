@@ -93,4 +93,49 @@
       <button type="submit" class="boton primario">Validar solicitud</button>
     </div>
   </form>
+
+  <section class="tarjeta panel-busqueda">
+    <div class="tarjeta-header">
+      <h2>Buscar en el listado</h2>
+      <p>
+        El texto se recorta con trim() y se emite tras 300 ms sin escribir. Si el valor no cambia,
+        no se cuenta otra emisión.
+      </p>
+    </div>
+
+    <div class="campo">
+      <label for="buscar">Buscar</label>
+      <input
+        id="buscar"
+        type="search"
+        [formControl]="busqueda"
+        placeholder="Ej. Sala, María, Auditorio"
+        autocomplete="off"
+      />
+    </div>
+
+    <p class="resumen-busqueda" id="resumen-busqueda">
+      Último valor: <strong>{{ ultimoValor() || '—' }}</strong>. Emisiones:
+      <strong>{{ emisiones() }}</strong>
+    </p>
+
+    <p class="conteo-listado">
+      Mostrando {{ visibles().length }} de {{ totalRegistros() }} reservas.
+    </p>
+
+    <div class="lista-reservas">
+      @for (registro of visibles(); track registro.id) {
+        <article class="reserva">
+          <span class="codigo-reserva">R{{ registro.id.toString().padStart(2, '0') }}</span>
+          <span class="responsable">{{ registro.responsable }}</span>
+          <span>{{ registro.espacio }}</span>
+          <span [class]="'badge ' + registro.estado">{{ registro.estado }}</span>
+        </article>
+      } @empty {
+        <p class="vacio" id="sin-coincidencias">
+          Sin coincidencias para «{{ ultimoValor() }}».
+        </p>
+      }
+    </div>
+  </section>
 </section>
